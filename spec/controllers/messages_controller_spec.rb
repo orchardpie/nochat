@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe MessagesController do
-  before { sign_in User.create(email: 'kevinwo@orchardpie.com', password: 'iliketurtles', password_confirmation: 'iliketurtles') }
+  before { sign_in users(:kevin) }
 
   describe '#index' do
     subject { -> { get :index, format: format } }
