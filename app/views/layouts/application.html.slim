@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    title Nochat
+    = stylesheet_link_tag "application", media: "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+  body
+    header
+      - flash.each do |name, msg|
+        = content_tag :div, msg, class: "flash_#{name}"
+    = yield
+
