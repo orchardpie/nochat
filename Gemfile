@@ -8,6 +8,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem 'jbuilder', '~> 1.2'
 gem 'slim'
+gem 'devise'
 
 group :development, :test do
   gem 'rspec-rails'

@@ -27,7 +27,14 @@ GEM
       tzinfo (~> 0.3.37)
     arel (4.0.2)
     atomic (1.1.16)
+    bcrypt (3.1.7)
     builder (3.1.4)
+    devise (3.2.4)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
     diff-lcs (1.2.5)
     dotenv (0.10.0)
     dotenv-rails (0.10.0)
@@ -55,6 +62,7 @@ GEM
     mime-types (1.25.1)
     minitest (4.7.5)
     multi_json (1.9.0)
+    orm_adapter (0.5.0)
     pg (0.17.1)
     phantomjs (1.9.7.0)
     polyglot (0.3.4)
@@ -117,11 +125,14 @@ GEM
     uglifier (2.5.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    warden (1.2.3)
+      rack (>= 1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  devise
   dotenv-rails
   jasmine
   jbuilder (~> 1.2)
