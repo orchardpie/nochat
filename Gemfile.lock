@@ -29,6 +29,11 @@ GEM
     atomic (1.1.16)
     bcrypt (3.1.7)
     builder (3.1.4)
+    byebug (2.7.0)
+      columnize (~> 0.3)
+      debugger-linecache (~> 1.2)
+    columnize (0.3.6)
+    debugger-linecache (1.2.0)
     devise (3.2.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -132,6 +137,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  byebug
   devise
   dotenv-rails
   jasmine
