@@ -12,6 +12,16 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
+module HandleExceptionsInSpecs
+  def process(*)
+    super
+  rescue ActiveRecord::RecordNotFound
+    @response.status = 404
+  rescue ActionController::UnknownFormat
+    @response.status = 406
+  end
+end
+
 RSpec.configure do |config|
   # ## Mock Framework
   #
@@ -41,5 +51,6 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.include Devise::TestHelpers, type: :controller
+  config.include HandleExceptionsInSpecs, type: :controller
 end
 
