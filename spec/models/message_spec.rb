@@ -33,5 +33,19 @@ describe Message do
       it { should have(1).error_on(:body) }
     end
   end
+
+  describe "callbacks" do
+    subject { message }
+
+    let(:message) { Message.new(body: body) }
+    let(:body) { 'Come on fhqwgads' }
+
+    before do
+      message.run_callbacks(:save)
+    end
+
+    its(:word_count) { should == 3 }
+    its(:time_saved) { should == 720 } # 240ms per word
+  end
 end
 
