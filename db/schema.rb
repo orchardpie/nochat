@@ -11,10 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140319143318) do
+ActiveRecord::Schema.define(version: 20140328151001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "messages", force: true do |t|
+    t.integer  "sender_id",   null: false
+    t.integer  "receiver_id", null: false
+    t.integer  "word_count",  null: false
+    t.integer  "time_saved",  null: false
+    t.text     "body",        null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "messages", ["receiver_id"], name: "index_messages_on_receiver_id", using: :btree
+  add_index "messages", ["sender_id"], name: "index_messages_on_sender_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -33,5 +46,8 @@ ActiveRecord::Schema.define(version: 20140319143318) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  add_foreign_key "messages", "users", name: "messages_receiver_id_fk", column: "receiver_id"
+  add_foreign_key "messages", "users", name: "messages_sender_id_fk", column: "sender_id"
 
 end
