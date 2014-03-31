@@ -23,6 +23,20 @@ module HandleExceptionsInSpecs
   end
 end
 
+module CurrentUserInViews
+  extend ActiveSupport::Concern
+
+  included do
+    alias_method_chain :setup_with_controller, :current_user
+  end
+
+  def setup_with_controller_with_current_user
+    setup_with_controller_without_current_user
+
+    view.class_eval { attr_accessor :current_user }
+  end
+end
+
 RSpec.configure do |config|
   # ## Mock Framework
   #
@@ -54,5 +68,6 @@ RSpec.configure do |config|
 
   config.include Devise::TestHelpers, type: :controller
   config.include HandleExceptionsInSpecs, type: :controller
+  config.include CurrentUserInViews, type: :view
 end
 
