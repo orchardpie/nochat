@@ -5,7 +5,8 @@ class MessagesController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    respond_with()
+    @messages = current_user.messages
+    respond_with(@messages)
   end
 
   def create

@@ -5,3 +5,10 @@ kevin:
   email: kevinwo@orchardpie.com
   encrypted_password: password
 
+randall:
+  id: 2
+  created_at: 2014-03-19 17:21:23.926511 Z
+  updated_at: 2014-03-19 17:21:23.926511 Z
+  email: tripelli@orchardpie.com
+  encrypted_password: password
+
