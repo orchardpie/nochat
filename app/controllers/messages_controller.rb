@@ -9,7 +9,7 @@ class MessagesController < ApplicationController
   end
 
   def create
-    @message = Message.create(message_params.merge(sender_id: current_user.id))
+    @message = current_user.sent_messages.create(message_params)
     respond_with(@message)
   end
 
