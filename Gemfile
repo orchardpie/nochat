@@ -10,6 +10,7 @@ gem 'jbuilder', '~> 1.2'
 gem 'slim'
 gem 'devise'
 gem 'foreigner'
+gem 'bootstrap-sass'
 
 group :development, :test do
   gem 'rspec-rails'
