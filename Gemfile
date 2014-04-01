@@ -21,3 +21,5 @@ group :development do
   gem 'byebug'
 end
 
+ruby '2.1.1'
+
