@@ -6,15 +6,15 @@ describe MessagesController do
 
   describe '#index' do
     subject { -> { get :index, format: format } }
-
     let(:format) { :html }
 
     it_should_behave_like "an action that returns", :html, :json
-    it { should respond_with_template(:index) }
 
+    it { should respond_with_template(:index) }
     it { should assign(:messages) }
 
     context "with HTML" do
+      let(:format) { :html }
       it_should_behave_like "an action that requires a login"
     end
 
@@ -27,7 +27,7 @@ describe MessagesController do
   describe '#create' do
     subject { -> { put :create, message: params, format: format } }
     let(:format) { :json }
-    let(:params) { { receiver_id: 1, body: 'What up Kevino!' } }
+    let(:params) { { receiver_email: 'kevinwo@orchardpie.com', body: 'What up Kevino!' } }
 
     it_should_behave_like "a non-navigational action that requires a login"
     it_should_behave_like "an action that returns", :json

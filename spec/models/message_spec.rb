@@ -38,14 +38,29 @@ describe Message do
     subject { message }
 
     let(:message) { Message.new(body: body) }
+    let(:receiver) { users(:randall) }
     let(:body) { 'Come on fhqwgads' }
 
-    before do
-      message.run_callbacks(:save)
+    context "before_save" do
+      before { message.run_callbacks(:save) }
+
+      its(:word_count) { should == 3 }
+      its(:time_saved) { should == 720 } # 240ms per word
     end
 
-    its(:word_count) { should == 3 }
-    its(:time_saved) { should == 720 } # 240ms per word
+    context "before_validation" do
+      before { message.run_callbacks(:validation) }
+
+      context "when the receiver is set" do
+        let(:message) { Message.new(receiver: receiver, body: body) }
+        its(:receiver) { should == receiver }
+      end
+
+      context "when the receiver is set by e-mail" do
+        let(:message) { Message.new(receiver_email: receiver.email, body: body) }
+        its(:receiver) { should == receiver }
+      end
+    end
   end
 end
 
