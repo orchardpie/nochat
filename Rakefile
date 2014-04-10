@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Nochat::Application.load_tasks
+NoChat::Application.load_tasks

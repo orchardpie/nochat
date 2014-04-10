@@ -10,5 +10,5 @@
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
 raise 'Please generate a secret key' unless ENV['SECRET_KEY']
-Nochat::Application.config.secret_key_base = ENV['SECRET_KEY']
+NoChat::Application.config.secret_key_base = ENV['SECRET_KEY']
 
