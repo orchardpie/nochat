@@ -18,7 +18,7 @@ shared_examples_for "a non-navigational action that requires a login" do
     it { should_not respond_with_status :unauthorized }
   end
 
-  context "with basic auth" do
+  context "with valid basic auth credentials" do
     before do
       user.update_attributes(password: 'a valid password', password_confirmation: 'a valid password')
       request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.encode_credentials(user.email, 'a valid password')
@@ -27,8 +27,16 @@ shared_examples_for "a non-navigational action that requires a login" do
     let(:user) { users(:kevin) }
 
     it { should_not respond_with_status :unauthorized }
+    it { should respond_with_header("X-User-Token").with_value(user.authentication_token) }
+  end
 
-    it "should return a fresh token in the header"
+  context "with invalid basic auth credentials" do
+    before do
+      request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.encode_credentials('mallory@example.com', 'an invalid password')
+    end
+
+    it { should respond_with_status :unauthorized }
+    it { should_not respond_with_header("X-User-Token") }
   end
 end
 
