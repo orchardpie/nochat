@@ -25,7 +25,7 @@ describe MessagesController do
   end
 
   describe '#create' do
-    subject { -> { put :create, message: params, format: format } }
+    subject { -> { post :create, message: params, format: format } }
     let(:format) { :json }
     let(:params) { { receiver_email: 'kevinwo@orchardpie.com', body: 'What up Kevino!' } }
 
