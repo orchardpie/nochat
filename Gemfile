@@ -11,6 +11,7 @@ gem 'slim'
 gem 'devise'
 gem 'foreigner'
 gem 'bootstrap-sass'
+gem 'simple_token_authentication'
 
 group :development, :test do
   gem 'rspec-rails'

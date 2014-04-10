@@ -4,6 +4,7 @@ kevin:
   updated_at: 2014-03-19 17:21:23.926511 Z
   email: kevinwo@orchardpie.com
   encrypted_password: password
+  authentication_token: abcefgtoken
 
 randall:
   id: 2
