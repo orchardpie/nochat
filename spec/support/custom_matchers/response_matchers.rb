@@ -23,6 +23,35 @@ RSpec::Matchers.define :respond_with_status do |status|
   end
 end
 
+RSpec::Matchers.define :respond_with_header do |header|
+  chain :with_value do |value|
+    @value = value
+  end
+
+  match do |block|
+    block.call
+
+    if @value
+      response.headers[header.to_s] == @value
+    else
+      response.headers.include?(header.to_s)
+    end
+  end
+
+  failure_message_for_should do
+    message = "Expected header '#{header}' to be set"
+    if @value
+      message += " to '#{@value}'"
+      if response.headers.include?(header.to_s)
+        message += " but it was set to '#{response.headers[header.to_s]}'"
+      else
+        message += " but it was not set"
+      end
+    end
+    message
+  end
+end
+
 class RespondWithRedirectMatcher
   def initialize(rspec, response, target_path, &target_path_block)
     @rspec = rspec
