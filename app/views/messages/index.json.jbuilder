@@ -11,5 +11,5 @@ json_messages = []
   end
 end
 
-json.array!(json_messages)
+json.array!(messages: json_messages)
 
