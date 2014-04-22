@@ -21,6 +21,9 @@
 
 en:
   activerecord:
+    attributes:
+      message:
+        receiver_id: "Recipient"
     errors:
       models:
         user:
@@ -29,3 +32,7 @@ en:
               too_short: "is too short.\n Please make sure there are at least 8 characters."
             email:
               invalid: "is invalid.\n Please enter a valid email address."
+        message:
+          attributes:
+            receiver_id:
+              blank: "is not a NoChat user."
