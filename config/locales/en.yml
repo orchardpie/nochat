@@ -20,4 +20,12 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            password:
+              too_short: "is too short.\n Please make sure there are at least 8 characters."
+            email:
+              invalid: "is invalid.\n Please enter a valid email address."
