@@ -11,5 +11,8 @@ json_messages = []
   end
 end
 
-json.array!(messages: json_messages)
+json.messages do
+  json.array!(resource: json_messages)
+  json.location messages_path(format: :json)
+end
 
