@@ -19,6 +19,10 @@ describe "messages/index.json.jbuilder" do
     it "should set the message's disposition to 'sent'" do
       subject["messages"]["resource"].detect{ |message| message['id'] == sent_message.id }['disposition'].should == 'sent'
     end
+
+    it "should set the time saved description" do
+      subject["messages"]["resource"].detect{ |message| message['id'] == sent_message.id }['time_saved_description'].should == '1 second saved'
+    end
   end
 
   context "with a message received by the current user" do
@@ -32,6 +36,9 @@ describe "messages/index.json.jbuilder" do
       subject["messages"]["resource"].detect{ |message| message['id'] == sent_message.id }['disposition'].should == 'received'
     end
 
+    it "should set the time saved description" do
+      subject["messages"]["resource"].detect{ |message| message['id'] == sent_message.id }['time_saved_description'].should == '1 second saved'
+    end
   end
 
   context "with a message sent and received by the current user" do
