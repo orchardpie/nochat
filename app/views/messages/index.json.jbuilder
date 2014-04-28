@@ -1,2 +1,2 @@
-json.partial! 'messages/index', messages: @messages
+json.partial! 'messages/index', user: current_user, messages: @messages
 

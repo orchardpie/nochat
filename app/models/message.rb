@@ -11,6 +11,14 @@ class Message < ActiveRecord::Base
   before_save :generate_word_count, :generate_time_saved
   before_validation :fetch_receiver_by_email, if: ->(record){ record.receiver_email.present? }
 
+  def sent_by?(user)
+    sender_id == user.id
+  end
+
+  def received_by?(user)
+    receiver_id == user.id
+  end
+
   private
 
   def generate_word_count

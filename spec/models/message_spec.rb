@@ -1,8 +1,11 @@
 require 'spec_helper'
 
 describe Message do
+  let(:message) { Message.new }
+
   describe "validations" do
     subject { Message.new(params) }
+
     let(:params) do
       {
         sender_id: sender_id,
@@ -34,32 +37,59 @@ describe Message do
     end
   end
 
-  describe "callbacks" do
-    subject { message }
+  describe "before_save" do
+    subject { -> { message.run_callbacks(:save) } }
 
-    let(:message) { Message.new(body: body) }
+    before { message.body = "Come on fhqwgads" }
+
+    it { should change(message, :word_count).from(nil).to(3) }
+    it { should change(message, :time_saved).from(nil).to(720) } # 240ms per word
+  end
+
+  context "before_validation" do
+    subject { -> { message.run_callbacks(:validation) } }
     let(:receiver) { users(:randall) }
-    let(:body) { 'Come on fhqwgads' }
 
-    context "before_save" do
-      before { message.run_callbacks(:save) }
-
-      its(:word_count) { should == 3 }
-      its(:time_saved) { should == 720 } # 240ms per word
+    context "when the receiver is set directly" do
+      before { message.receiver = receiver }
+      it { should_not change(message, :receiver) }
     end
 
-    context "before_validation" do
-      before { message.run_callbacks(:validation) }
+    context "when the receiver is set by e-mail" do
+      before { message.receiver_email = receiver.email }
+      it { should change(message, :receiver).from(nil).to(receiver) }
+    end
+  end
 
-      context "when the receiver is set" do
-        let(:message) { Message.new(receiver: receiver, body: body) }
-        its(:receiver) { should == receiver }
-      end
+  describe "#sent_by?" do
+    subject { message.sent_by?(user) }
+    let(:message) { Message.new(sender: sender) }
+    let(:user) { User.new(id: 7) }
 
-      context "when the receiver is set by e-mail" do
-        let(:message) { Message.new(receiver_email: receiver.email, body: body) }
-        its(:receiver) { should == receiver }
-      end
+    context "when the user's ID matches the message's sender ID" do
+      let(:sender) { user }
+      it { should be_true }
+    end
+
+    context "when the user's ID does not match the message's sender ID" do
+      let(:sender) { User.new(id: 8) }
+      it { should_not be_true }
+    end
+  end
+
+  describe "#received_by?" do
+    subject { message.received_by?(user) }
+    let(:message) { Message.new(receiver: receiver) }
+    let(:user) { User.new(id: 7) }
+
+    context "when the user's ID matches the message's receiver ID" do
+      let(:receiver) { user }
+      it { should be_true }
+    end
+
+    context "when the user's ID does not match the message's receiver ID" do
+      let(:receiver) { User.new(id: 8) }
+      it { should_not be_true }
     end
   end
 end

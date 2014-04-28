@@ -1,7 +1,7 @@
 json.location user_path(current_user)
 json.data do
   json.messages do
-    json.partial! 'messages/index', messages: current_user.messages
+    json.partial! 'messages/index', user: current_user, messages: current_user.messages
   end
 end
 
