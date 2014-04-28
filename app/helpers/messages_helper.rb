@@ -4,3 +4,4 @@ module MessagesHelper
     "#{pluralize(time_in_seconds, 'second')} saved"
   end
 end
+

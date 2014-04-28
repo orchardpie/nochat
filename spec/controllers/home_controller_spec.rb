@@ -4,8 +4,8 @@ describe HomeController do
   let(:current_user) { users(:kevin) }
   before { sign_in current_user }
 
-  describe '#index' do
-    subject { -> { get :index, format: format } }
+  describe '#show' do
+    subject { -> { get :show, format: format } }
 
     it_should_behave_like "an action that returns", :html, :json
 
@@ -18,8 +18,7 @@ describe HomeController do
     context "with JSON" do
       let(:format) { :json }
 
-      it { should respond_with_template(:index) }
-      it { should assign(:messages) }
+      it { should respond_with_template(:show) }
 
       it_should_behave_like "a non-navigational action that requires a login"
     end

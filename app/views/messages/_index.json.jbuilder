@@ -1,5 +1,5 @@
 json_messages = []
-@messages.each do |message|
+messages.each do |message|
   if message.sender_id == current_user.id
     new_message = message
       .as_json(only: [:id, :time_saved, :created_at])
@@ -15,8 +15,8 @@ json_messages = []
   end
 end
 
-json.messages do
-  json.array!(resource: json_messages)
-  json.location messages_path(format: :json)
+json.location messages_path
+json.data do
+  json.array!(json_messages)
 end
 
