@@ -3,5 +3,5 @@ json.user do
     json.messages messages_path
   end
 end
-json.partial! 'messages/messages', messages: @messages
+json.partial! 'messages/index', messages: @messages
 
