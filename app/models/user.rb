@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   has_many :received_messages, class_name: "Message", foreign_key: :receiver_id
 
   def messages
-    Message.where("sender_id = ? OR receiver_id = ?", self, self).order("id DESC")
+    Message.where("sender_id = :user OR receiver_id = :user", user: self).order(id: :desc)
   end
 end
 
