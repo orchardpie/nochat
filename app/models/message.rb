@@ -30,7 +30,9 @@ class Message < ActiveRecord::Base
   end
 
   def fetch_receiver_by_email
-    self.receiver_id = User.find_by_email(receiver_email).try(:id)
+    if user = User.find_by('lower(email) = lower(:email)', email: receiver_email)
+      self.receiver_id = user.id
+    end
   end
 end
 

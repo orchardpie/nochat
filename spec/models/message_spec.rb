@@ -59,6 +59,11 @@ describe Message do
       before { message.receiver_email = receiver.email }
       it { should change(message, :receiver).from(nil).to(receiver) }
     end
+
+    context "when the receiver's e-mail is specified with silly casing" do
+      before { message.receiver_email = receiver.email.upcase }
+      it { should change(message, :receiver).from(nil).to(receiver) }
+    end
   end
 
   describe "#sent_by?" do
