@@ -10,11 +10,13 @@ describe Message do
       {
         sender_id: sender_id,
         receiver_id: receiver_id,
+        receiver_email: receiver_email,
         body: body
       }
     end
     let(:sender_id) { 17 }
     let(:receiver_id) { 666 }
+    let(:receiver_email) { users(:kevin).email }
     let(:body) { "Hello." }
 
     context "with a sender, a receiver, & a message" do
@@ -22,28 +24,39 @@ describe Message do
     end
 
     context "without a sender" do
-      let(:sender_id) { nil }
+      let(:sender_id) { "" }
       it { should have(1).error_on(:sender_id) }
     end
 
-    context "without a receiver" do
-      let(:receiver_id) { nil }
-      it { should have(1).error_on(:receiver_id) }
+    context "without a receiver email" do
+      let(:receiver_id) { "" }
+      let(:receiver_email) { "" }
+      it { should have(1).error_on(:receiver_email) }
     end
 
     context "without a message" do
-      let(:body) { nil }
+      let(:body) { "" }
       it { should have(1).error_on(:body) }
     end
   end
 
-  describe "before_save" do
-    subject { -> { message.run_callbacks(:save) } }
+  describe "before_create" do
+    subject { -> { message.save! } }
 
-    before { message.body = "Come on fhqwgads" }
+    let(:message) { Message.new(sender: users(:randall), receiver_email: "a@example.com", body: "Come on fhqwgads") }
 
     it { should change(message, :word_count).from(nil).to(3) }
     it { should change(message, :time_saved).from(nil).to(720) } # 240ms per word
+
+    context "with a known receiver" do
+      before { message.receiver = users(:kevin) }
+      it { should_not change(message, :invitation).from(nil) }
+    end
+
+    context "without a known receiver" do
+      before { message.receiver.should be_nil }
+      it { should change(message, :invitation).from(nil) }
+    end
   end
 
   context "before_validation" do
@@ -52,17 +65,17 @@ describe Message do
 
     context "when the receiver is set directly" do
       before { message.receiver = receiver }
-      it { should_not change(message, :receiver) }
+      it { should_not change(message, :receiver_id) }
     end
 
     context "when the receiver is set by e-mail" do
       before { message.receiver_email = receiver.email }
-      it { should change(message, :receiver).from(nil).to(receiver) }
+      it { should change(message, :receiver_id).from(nil).to(receiver.id) }
     end
 
     context "when the receiver's e-mail is specified with silly casing" do
       before { message.receiver_email = receiver.email.upcase }
-      it { should change(message, :receiver).from(nil).to(receiver) }
+      it { should change(message, :receiver_id).from(nil).to(receiver.id) }
     end
   end
 

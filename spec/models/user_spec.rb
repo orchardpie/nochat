@@ -8,13 +8,13 @@ describe User do
     let(:randall) { users(:randall) }
 
     context "with a message sent by the user" do
-      let!(:message) { Message.create!(sender: user, receiver: randall, body: "updog") }
+      let!(:message) { user.sent_messages.create!(receiver_email: randall.email, body: "updog") }
 
       it { should include(message) }
     end
 
     context "with a message received by the user" do
-      let!(:message) { Message.create!(sender: randall, receiver: user, body: "what is updog") }
+      let!(:message) { randall.sent_messages.create!(receiver_email: user.email, body: "what is updog") }
 
       it { should include(message) }
     end

@@ -1,0 +1,8 @@
+kevin_to_randall:
+  receiver_email: tripleLI@orchardpie.com
+  sender: kevin
+  receiver: randall
+  body: "Hey Randall, old buddy, old pal.  I'd gladly pay you Tuesday for a hamburger today"
+  word_count: 3
+  time_saved: 234
+

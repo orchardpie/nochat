@@ -11,19 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140401200210) do
+ActiveRecord::Schema.define(version: 20140506195738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "messages", force: true do |t|
-    t.integer  "sender_id",   null: false
-    t.integer  "receiver_id", null: false
-    t.integer  "word_count",  null: false
-    t.integer  "time_saved",  null: false
-    t.text     "body",        null: false
+  create_table "invitations", force: true do |t|
+    t.integer  "message_id", null: false
+    t.string   "token",      null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  add_index "invitations", ["message_id"], name: "index_invitations_on_message_id", using: :btree
+  add_index "invitations", ["token"], name: "index_invitations_on_token", using: :btree
+
+  create_table "messages", force: true do |t|
+    t.integer  "sender_id",      null: false
+    t.integer  "receiver_id"
+    t.integer  "word_count",     null: false
+    t.integer  "time_saved",     null: false
+    t.text     "body",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "receiver_email", null: false
   end
 
   add_index "messages", ["receiver_id"], name: "index_messages_on_receiver_id", using: :btree
@@ -48,6 +59,8 @@ ActiveRecord::Schema.define(version: 20140401200210) do
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  add_foreign_key "invitations", "messages", name: "invitations_message_id_fk"
 
   add_foreign_key "messages", "users", name: "messages_receiver_id_fk", column: "receiver_id"
   add_foreign_key "messages", "users", name: "messages_sender_id_fk", column: "sender_id"

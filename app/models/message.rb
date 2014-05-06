@@ -1,14 +1,16 @@
 class Message < ActiveRecord::Base
   AVERAGE_MS_PER_WORD = 240
 
+  has_one :invitation
   belongs_to :sender, class_name: "User"
   belongs_to :receiver, class_name: "User"
 
-  attr_accessor :message, :receiver_email
+  attr_accessor :message
 
-  validates :sender_id, :receiver_id, :body, presence: true
+  validates :sender_id, :receiver_email, :body, presence: true
 
-  before_save :generate_word_count, :generate_time_saved
+  before_create :build_invitation, unless: :receiver_id
+  before_create :generate_word_count, :generate_time_saved
   before_validation :fetch_receiver_by_email, if: ->(record){ record.receiver_email.present? }
 
   def sent_by?(user)
