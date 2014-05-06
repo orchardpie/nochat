@@ -6,3 +6,10 @@ kevin_to_randall:
   word_count: 3
   time_saved: 234
 
+kevin_to_new_user:
+  receiver_email: wibble@example.com
+  sender: kevin
+  body: "I've hated you since the first time I saw you.  If you ever get this, meet me at high noon with pistols ready."
+  word_count: 11
+  time_saved: 3000
+
