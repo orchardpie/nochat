@@ -56,3 +56,12 @@ shared_examples_for "an action that returns" do |*acceptable_formats|
   end
 end
 
+shared_examples_for "an action that requires" do |*resources|
+  resources.each do |resource|
+    context "with an invalid or missing #{resource}" do
+      let(resource) { double(to_param: "does-not-exist", reload: nil) }
+      it { should respond_with_status(:missing) }
+    end
+  end
+end
+
