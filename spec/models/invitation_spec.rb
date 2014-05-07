@@ -16,15 +16,17 @@ describe Invitation do
   end
 
   describe "before create" do
-    subject { -> { invitation.save! } }
-    before { invitation.should be_new_record }
+    subject { -> { invitation.run_callbacks(:create) } }
 
     it { should change(invitation, :token).to be_present }
   end
 
   describe "after commit" do
     subject { -> { invitation.run_callbacks(:commit) } }
-    before { invitation.stub(:transaction_record_state).and_return(new_record?) }
+    before do
+      invitation.run_callbacks(:create)
+      invitation.stub(:transaction_record_state).and_return(new_record?)
+    end
 
     context "on create" do
       let(:new_record?) { true }

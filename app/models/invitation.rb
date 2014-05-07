@@ -25,7 +25,7 @@ class Invitation < ActiveRecord::Base
   end
 
   def send_invitation_email
-    NoChatMailer.invitation(message).deliver
+    NoChatMailer.invitation(self).deliver
   end
 end
 
