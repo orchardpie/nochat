@@ -17,6 +17,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'jasmine'
   gem 'dotenv-rails'
+  gem 'fixture_builder'
 end
 
 group :development do
