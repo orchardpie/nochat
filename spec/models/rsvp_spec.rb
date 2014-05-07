@@ -29,10 +29,9 @@ describe Rsvp do
     subject { -> { rsvp.save } }
 
     let(:rsvp) { Rsvp.new(params) }
+    let(:params) { { user: { email: 'iliketurtles@orchardpie.com', password: 'password' } } }
 
     context "with valid params" do
-      let(:params) { { user: { email: 'iliketurtles@orchardpie.com', password: 'password' } } }
-
       it { should change(User, :count).by(1) }
     end
 
@@ -40,6 +39,22 @@ describe Rsvp do
       let(:params) { { } }
 
       it { should_not change(User, :count) }
+    end
+
+    context "with an invitation associated to the new user" do
+      let!(:message) { Message.create(sender: users(:kevin), receiver_email: 'iliketurtles@orchardpie.com', body: 'I LIKE TURTLES') }
+      let(:invitation) { message.invitation }
+
+      it { should change { invitation.reload.responded_to? }.to(true) }
+      it { should change { message.reload.receiver_id } }
+    end
+
+    context "with an invitation not associated to the new user" do
+      let!(:message) { Message.create(sender: users(:kevin), receiver_email: 'ihateturtles@orchardpie.com', body: 'SCREW YOU, I LIKE TURTLES') }
+      let(:invitation) { message.invitation }
+
+      it { should_not change { invitation.reload.responded_to? } }
+      it { should_not change { message.reload.receiver_id } }
     end
   end
 end
