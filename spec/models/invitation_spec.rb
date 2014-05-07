@@ -3,6 +3,18 @@ require 'spec_helper'
 describe Invitation do
   let(:invitation) { Invitation.new(message_id: messages(:kevin_to_randall).id) }
 
+  describe ".find_by_param" do
+    let(:invitation) { Invitation.first }
+    subject { Invitation.find_by_param(invitation.token) }
+    it { should == invitation }
+  end
+
+  describe "#to_param" do
+    subject { invitation.to_param }
+    before { invitation.token = "comeonfhqwghads" }
+    it { should == invitation.token }
+  end
+
   describe "before create" do
     subject { -> { invitation.save! } }
     before { invitation.should be_new_record }
