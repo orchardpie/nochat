@@ -2,8 +2,6 @@ class MessagesController < ApplicationController
   respond_to :json
   respond_to :html, only: :index
 
-  before_filter :authenticate_user!
-
   def index
     @messages = current_user.messages
     respond_with(@messages)
