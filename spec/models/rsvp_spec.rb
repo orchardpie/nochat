@@ -1,27 +1,31 @@
 require 'spec_helper'
 
 describe Rsvp do
+  let(:invitation) { messages(:kevin_to_new_user).invitation }
+
   describe "validations" do
     subject { Rsvp.new(params) }
 
-    let(:params) { { user: user_params } }
+    let(:params) {
+      {
+        user: user_params,
+        invitation: invitation
+      }
+    }
 
     context "with a valid user" do
-      let(:user_params) { { email: 'valid@example.com', password: 'password', password_confirmation: 'password' } }
+      let(:user_params) { { password: 'password' } }
 
-      it { should be_valid }
+      context "with an invitation" do
+        it { should be_valid }
+      end
     end
 
     context "with an invalid user" do
-      let(:user_params) { { email: '', password: 'password', password_confirmation: 'password' } }
+      let(:user_params) { { password: '2shrt' } }
 
       it { should_not be_valid }
-    end
-
-    context "with no user" do
-      let(:user_params) { nil }
-
-      it { should_not be_valid }
+      it { should have(1).error_on(:password) }
     end
   end
 
@@ -29,32 +33,43 @@ describe Rsvp do
     subject { -> { rsvp.save } }
 
     let(:rsvp) { Rsvp.new(params) }
-    let(:params) { { user: { email: 'iliketurtles@orchardpie.com', password: 'password' } } }
+    let(:params) {
+      {
+        user: { password: 'password' },
+        invitation: invitation
+      }
+    }
 
     context "with valid params" do
       it { should change(User, :count).by(1) }
+
+      it { should change { invitation.reload.responded_to? }.to(true) }
+      it { should change { invitation.message.reload.receiver_id } }
+
+      context "with other invitations associated to the user's e-mail" do
+        let!(:other_message) { Message.create(sender: users(:kevin), receiver_email: invitation.message.receiver_email, body: 'I LIKE TURTLES') }
+        let(:other_invitation) { other_message.invitation }
+
+        it { should change { other_invitation.reload.responded_to? } }
+        it { should change { other_message.reload.receiver_id } }
+      end
+
+      context "with other invitations not associated the user's e-mail" do
+        let!(:other_message) { Message.create(sender: users(:kevin), receiver_email: 'ihateturtles@orchardpie.com', body: 'SCREW YOU, I LIKE TURTLES') }
+        let(:other_invitation) { other_message.invitation }
+
+        it { should_not change { other_invitation.reload.responded_to? } }
+        it { should_not change { other_message.reload.receiver_id } }
+      end
     end
 
     context "without valid params" do
-      let(:params) { { } }
+      let(:params) { { invitation: invitation, user: { password: '2shrt' } } }
 
       it { should_not change(User, :count) }
-    end
 
-    context "with an invitation associated to the new user" do
-      let!(:message) { Message.create(sender: users(:kevin), receiver_email: 'iliketurtles@orchardpie.com', body: 'I LIKE TURTLES') }
-      let(:invitation) { message.invitation }
-
-      it { should change { invitation.reload.responded_to? }.to(true) }
-      it { should change { message.reload.receiver_id } }
-    end
-
-    context "with an invitation not associated to the new user" do
-      let!(:message) { Message.create(sender: users(:kevin), receiver_email: 'ihateturtles@orchardpie.com', body: 'SCREW YOU, I LIKE TURTLES') }
-      let(:invitation) { message.invitation }
-
-      it { should_not change { invitation.reload.responded_to? } }
-      it { should_not change { message.reload.receiver_id } }
+      it { should_not change { invitation.reload.responded_to? }.to(true) }
+      it { should_not change { invitation.message.reload.receiver_id } }
     end
   end
 end
