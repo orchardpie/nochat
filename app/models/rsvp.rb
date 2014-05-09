@@ -19,14 +19,7 @@ class Rsvp
   end
 
   def save
-    if @user.save
-      Message.where(receiver_email: @user.email).each do |message|
-        message.update_attributes(receiver_id: @user.id)
-        message.invitation.update_attributes(responded_to: true)
-      end
-
-      true
-    end
+    @user.save
   end
 
   private

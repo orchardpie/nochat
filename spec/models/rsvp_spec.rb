@@ -42,34 +42,12 @@ describe Rsvp do
 
     context "with valid params" do
       it { should change(User, :count).by(1) }
-
-      it { should change { invitation.reload.responded_to? }.to(true) }
-      it { should change { invitation.message.reload.receiver_id } }
-
-      context "with other invitations associated to the user's e-mail" do
-        let!(:other_message) { Message.create(sender: users(:kevin), receiver_email: invitation.message.receiver_email, body: 'I LIKE TURTLES') }
-        let(:other_invitation) { other_message.invitation }
-
-        it { should change { other_invitation.reload.responded_to? } }
-        it { should change { other_message.reload.receiver_id } }
-      end
-
-      context "with other invitations not associated the user's e-mail" do
-        let!(:other_message) { Message.create(sender: users(:kevin), receiver_email: 'ihateturtles@orchardpie.com', body: 'SCREW YOU, I LIKE TURTLES') }
-        let(:other_invitation) { other_message.invitation }
-
-        it { should_not change { other_invitation.reload.responded_to? } }
-        it { should_not change { other_message.reload.receiver_id } }
-      end
     end
 
     context "without valid params" do
       let(:params) { { invitation: invitation, user: { password: '2shrt' } } }
 
       it { should_not change(User, :count) }
-
-      it { should_not change { invitation.reload.responded_to? }.to(true) }
-      it { should_not change { invitation.message.reload.receiver_id } }
     end
   end
 end
