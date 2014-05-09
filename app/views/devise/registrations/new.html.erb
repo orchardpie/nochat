@@ -9,10 +9,7 @@
       <%= f.email_field :email, autofocus: true, class: 'form-control' %></div>
 
       <div class="form-group"><%= f.label :password %><br />
-        <%= f.password_field :password, autocomplete: "off", class: 'form-control' %></div>
-
-      <div class="form-group"><%= f.label :password_confirmation %><br />
-        <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control' %></div>
+        <%= f.password_field :password, autocomplete: 'off', class: 'form-control' %></div>
 
       <div class="form-group"><%= f.submit "Sign up", class: 'btn btn-primary' %></div>
     <% end %>
