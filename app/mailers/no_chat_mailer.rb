@@ -1,5 +1,5 @@
 class NoChatMailer < ActionMailer::Base
-  default from: "please-reply-via-nochat@nochat.me"
+  default from: "nochat-dev@googlegroups.com"
 
   def invitation(invitation)
     @invitation = invitation

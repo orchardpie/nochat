@@ -8,7 +8,6 @@ describe NoChatMailer do
 
     its(:to) { should include(message.receiver_email) }
     its(:subject) { should == "Someone has sent you a message via NoChat" }
-    its(:to_s) { should include(invitation_url(invitation)) }
   end
 end
 
