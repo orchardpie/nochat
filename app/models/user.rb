@@ -10,7 +10,9 @@ class User < ActiveRecord::Base
   after_create :accept_all_outstanding_invitations
 
   def messages
-    Message.where("sender_id = :user OR receiver_id = :user", user: self).order(id: :desc)
+    Message.where("sender_id = :user OR receiver_id = :user", user: self).order(id: :desc).tap do |messages|
+      messages.where(receiver_id: self).update_all(unread: false)
+    end
   end
 
   private

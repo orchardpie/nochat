@@ -35,12 +35,20 @@ describe User do
       let!(:message) { user.sent_messages.create!(receiver_email: randall.email, body: "updog") }
 
       it { should include(message) }
+      it "should leave the message as unread" do
+        subject
+        message.reload.should be_unread
+      end
     end
 
     context "with a message received by the user" do
       let!(:message) { randall.sent_messages.create!(receiver_email: user.email, body: "what is updog") }
 
       it { should include(message) }
+      it "should mark the message as read" do
+        subject
+        message.reload.should_not be_unread
+      end
     end
   end
 end
