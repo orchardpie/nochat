@@ -79,6 +79,15 @@ describe Message do
     end
   end
 
+  describe "#unread?" do
+    subject { message.unread? }
+
+    context "when the message is new" do
+      let(:message) { Message.new }
+      it { should be_true }
+    end
+  end
+
   describe "#sent_by?" do
     subject { message.sent_by?(user) }
     let(:message) { Message.new(sender: sender) }

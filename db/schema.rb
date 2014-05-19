@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140507195753) do
+ActiveRecord::Schema.define(version: 20140519162833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,14 +28,15 @@ ActiveRecord::Schema.define(version: 20140507195753) do
   add_index "invitations", ["token"], name: "index_invitations_on_token", using: :btree
 
   create_table "messages", force: true do |t|
-    t.integer  "sender_id",      null: false
+    t.integer  "sender_id",                     null: false
     t.integer  "receiver_id"
-    t.integer  "word_count",     null: false
-    t.integer  "time_saved",     null: false
-    t.text     "body",           null: false
+    t.integer  "word_count",                    null: false
+    t.integer  "time_saved",                    null: false
+    t.text     "body",                          null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "receiver_email", null: false
+    t.string   "receiver_email",                null: false
+    t.boolean  "unread",         default: true, null: false
   end
 
   add_index "messages", ["receiver_id"], name: "index_messages_on_receiver_id", using: :btree
