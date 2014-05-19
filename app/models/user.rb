@@ -5,7 +5,11 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :sent_messages, class_name: "Message", foreign_key: :sender_id
-  has_many :received_messages, class_name: "Message", foreign_key: :receiver_id
+  has_many :received_messages, class_name: "Message", foreign_key: :receiver_id do
+    def unread
+      self.where(unread: true)
+    end
+  end
 
   after_create :accept_all_outstanding_invitations
 

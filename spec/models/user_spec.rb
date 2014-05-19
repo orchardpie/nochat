@@ -1,6 +1,32 @@
 require 'spec_helper'
 
 describe User do
+  let(:user) { users(:kevin) }
+
+  describe "#received_messages.unread" do
+    subject { user.received_messages.unread }
+    let(:other_user) { users(:randall) }
+
+    context "with a message with the user as the recipient" do
+      let(:message) { Message.create(sender: other_user, receiver_email: user.email, body: 'I LIKE TURTLES') }
+
+      context "which has not been read" do
+        before { message.should be_unread }
+        it { should include(message) }
+      end
+
+      context "which has been read" do
+        before { message.update_column(:unread, false) }
+        it { should_not include(message) }
+      end
+    end
+
+    context "with a message with the user as the sender" do
+      let!(:message) { Message.create(sender: user, receiver_email: other_user.email, body: 'I HATE TURTLES') }
+      it { should_not include(message) }
+    end
+  end
+
   describe "after create" do
     subject { -> { user.save } }
 
