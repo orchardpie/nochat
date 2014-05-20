@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140519212228) do
+ActiveRecord::Schema.define(version: 20140520153403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "devices", force: true do |t|
+    t.integer  "user_id",                   null: false
+    t.string   "token",                     null: false
+    t.boolean  "enabled",    default: true, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "devices", ["user_id"], name: "index_devices_on_user_id", using: :btree
 
   create_table "invitations", force: true do |t|
     t.integer  "message_id",                   null: false
@@ -61,6 +71,8 @@ ActiveRecord::Schema.define(version: 20140519212228) do
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  add_foreign_key "devices", "users", name: "devices_user_id_fk"
 
   add_foreign_key "invitations", "messages", name: "invitations_message_id_fk"
 

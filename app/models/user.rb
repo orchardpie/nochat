@@ -10,8 +10,12 @@ class User < ActiveRecord::Base
       self.where(unread: true)
     end
   end
+  has_many :devices
 
+  before_create :add_device
   after_create :accept_all_outstanding_invitations
+
+  attr_accessor :device_token
 
   def messages
     Message.where("sender_id = :user OR receiver_id = :user", user: self).order(id: :desc).tap do |messages|
@@ -20,6 +24,10 @@ class User < ActiveRecord::Base
   end
 
   private
+
+  def add_device
+    devices.build(token: device_token) if device_token.present?
+  end
 
   def accept_all_outstanding_invitations
     Message.where(receiver_email: email).each do |message|
