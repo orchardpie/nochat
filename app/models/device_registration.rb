@@ -1,6 +1,12 @@
 class DeviceRegistration
   include ActiveModel::Model
 
+  class << self
+    def create(params)
+      DeviceRegistration.new(**params.symbolize_keys).tap { |dr| dr.save }
+    end
+  end
+
   validate :valid_device
 
   def initialize(user:, token:)
