@@ -3,6 +3,9 @@ json.data do
   json.messages do
     json.partial! 'messages/index', user: user, messages: user.messages
   end
+  json.device_registrations do
+    json.location device_registrations_path
+  end
 end
 
 # {

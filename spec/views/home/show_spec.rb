@@ -8,5 +8,6 @@ describe "home/show.json.jbuilder" do
   its([:location]) { should be_present }
   its([:data]) { should be_present }
   its([:data]) { should include(:messages) }
+  its([:data]) { should include(:device_registrations) }
 end
 
