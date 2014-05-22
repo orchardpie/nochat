@@ -12,6 +12,7 @@ gem 'devise'
 gem 'foreigner'
 gem 'bootstrap-sass'
 gem 'simple_token_authentication'
+gem 'houston'
 
 group :development, :test do
   gem 'rspec-rails'

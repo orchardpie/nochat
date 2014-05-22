@@ -29,5 +29,7 @@ NoChat::Application.configure do
 
   # Necessary for Devise
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
+
+  APN = Houston::Client.development
 end
 

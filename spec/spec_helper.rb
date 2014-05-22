@@ -50,6 +50,9 @@ RSpec.configure do |config|
   config.include HandleExceptionsInSpecs, type: :controller
   config.include CurrentUserInViews, type: :view
 
-  config.before(:each) { ActionMailer::Base.deliveries.clear }
+  config.before(:each) do
+    ActionMailer::Base.deliveries.clear
+    APN.reset
+  end
 end
 

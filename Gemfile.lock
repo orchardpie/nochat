@@ -35,6 +35,8 @@ GEM
       columnize (~> 0.3)
       debugger-linecache (~> 1.2)
     columnize (0.3.6)
+    commander (4.1.6)
+      highline (~> 1.6.11)
     debugger-linecache (1.2.0)
     devise (3.2.4)
       bcrypt (~> 3.0)
@@ -53,7 +55,11 @@ GEM
       activesupport (>= 2)
     foreigner (1.6.1)
       activerecord (>= 3.0.0)
+    highline (1.6.21)
     hike (1.2.3)
+    houston (2.0.2)
+      commander (~> 4.1)
+      json
     i18n (0.6.9)
     jasmine (2.0.0)
       jasmine-core (~> 2.0.0)
@@ -159,6 +165,7 @@ DEPENDENCIES
   dotenv-rails
   fixture_builder
   foreigner
+  houston
   jasmine
   jbuilder (~> 1.2)
   jquery-rails

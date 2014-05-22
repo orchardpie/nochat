@@ -27,31 +27,6 @@ describe User do
     end
   end
 
-  describe "before create" do
-    subject { -> { user.save! } }
-
-    let(:user) { User.new(email: 'totesmcgoats@orchardpie.com', password: 'password', device_token: device_token) }
-
-    context "with a device token" do
-      let(:device_token) { "nicedevicetoken" }
-
-      it { should change(user.devices, :count).by(+1) }
-      it { should change { user.devices.last.try(:token) }.to(device_token) }
-    end
-
-    context "without a device token" do
-      let(:device_token) { nil }
-
-      it { should_not change(user.devices, :count) }
-    end
-
-    context "with a blank device token" do
-      let(:device_token) { "" }
-
-      it { should_not change(user.devices, :count) }
-    end
-  end
-
   describe "after create" do
     subject { -> { user.save! } }
 
