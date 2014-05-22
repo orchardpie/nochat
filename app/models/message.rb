@@ -11,6 +11,7 @@ class Message < ActiveRecord::Base
 
   before_create :build_invitation, unless: :receiver_id
   before_create :generate_word_count, :generate_time_saved
+  after_commit :send_push_notification, if: :receiver_id, on: :create
   before_validation :fetch_receiver_by_email, if: ->(record){ record.receiver_email.present? }
 
   def sent_by?(user)
@@ -35,6 +36,10 @@ class Message < ActiveRecord::Base
     if user = User.find_by('lower(email) = lower(:email)', email: receiver_email)
       self.receiver_id = user.id
     end
+  end
+
+  def send_push_notification
+    PushNotification.new(receiver: receiver).deliver
   end
 end
 

@@ -2,15 +2,15 @@ require 'spec_helper'
 
 describe PushNotification do
   describe "#initialize" do
-    subject { -> { PushNotification.new(recipient: recipient) } }
+    subject { -> { PushNotification.new(receiver: receiver) } }
 
-    context "with a recipient" do
-      let(:recipient) { User.new }
+    context "with a receiver" do
+      let(:receiver) { User.new }
       it { should_not raise_error }
     end
 
-    context "without a recipient" do
-      let(:recipient) { nil }
+    context "without a receiver" do
+      let(:receiver) { nil }
       it { should raise_error }
     end
   end
@@ -18,12 +18,12 @@ describe PushNotification do
   describe "#deliver" do
     subject { -> { push.deliver } }
 
-    let(:push) { PushNotification.new(recipient: recipient) }
-    let(:recipient) { User.new }
+    let(:push) { PushNotification.new(receiver: receiver) }
+    let(:receiver) { User.new }
     let(:token) { 'comeonfhqwhgads' }
 
     context "when the user has a device" do
-      before { recipient.devices.build(token: token) }
+      before { receiver.devices.build(token: token) }
 
       it { should change(APN.notifications, :count).by(+1) }
 
@@ -32,14 +32,14 @@ describe PushNotification do
         APN.notifications.last.message.should_not be_nil
       end
 
-      it "should set the badge count to the number of unread messages for the recipient" do
+      it "should set the badge count to the number of unread messages for the receiver" do
         messages = [double(:message), double(:message)]
-        allow(recipient.received_messages).to receive(:unread).and_return(messages)
+        allow(receiver.received_messages).to receive(:unread).and_return(messages)
         subject.call
         APN.notifications.last.badge.should == messages.count
       end
 
-      it "should send the APN to the recipient's device" do
+      it "should send the APN to the receiver's device" do
         subject.call
         APN.notifications.last.token.should == token
       end
@@ -47,8 +47,8 @@ describe PushNotification do
 
     context "when the user has multiple devices" do
       before do
-        recipient.devices.build(token: token1)
-        recipient.devices.build(token: token2)
+        receiver.devices.build(token: token1)
+        receiver.devices.build(token: token2)
       end
 
       let(:token1) { 'comeonfhqwhgads' }
@@ -56,7 +56,7 @@ describe PushNotification do
 
       it { should change(APN.notifications, :count).by(+2) }
 
-      it "should send the APN to each of the recipient's devices" do
+      it "should send the APN to each of the receiver's devices" do
         subject.call
         APN.notifications.map(&:token).should include(token1)
         APN.notifications.map(&:token).should include(token2)
@@ -64,7 +64,7 @@ describe PushNotification do
     end
 
     context "when the user does not have a device" do
-      before { recipient.devices.should be_empty }
+      before { receiver.devices.should be_empty }
 
       it { should_not change(APN.notifications, :count) }
     end

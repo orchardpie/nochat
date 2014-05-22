@@ -59,6 +59,38 @@ describe Message do
     end
   end
 
+  describe "after commit" do
+    subject { -> { message.run_callbacks(:commit) } }
+
+    before { message.stub(:transaction_record_state).and_return(new_record?) }
+
+    let(:message) { Message.new(sender: users(:randall), receiver_email: "a@example.com", body: "Come on fhqwgads") }
+
+    context "on create" do
+      let(:new_record?) { true }
+
+      context "with a known receiver" do
+        before do
+          receiver.devices.create(token: 'updogupdog')
+          message.receiver = receiver
+        end
+        let(:receiver) { users(:kevin) }
+
+        it { should change(APN.notifications, :count).by(1) }
+      end
+
+      context "without a known receiver" do
+        before { message.receiver.should be_nil }
+        it { should_not change(APN.notifications, :count) }
+      end
+    end
+
+    context "on update" do
+      let(:new_record?) { false }
+      it { should_not change(APN.notifications, :count) }
+    end
+  end
+
   context "before_validation" do
     subject { -> { message.run_callbacks(:validation) } }
     let(:receiver) { users(:randall) }
