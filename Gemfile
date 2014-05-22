@@ -13,6 +13,7 @@ gem 'foreigner'
 gem 'bootstrap-sass'
 gem 'simple_token_authentication'
 gem 'houston'
+gem 'aws-sdk'
 
 group :development, :test do
   gem 'rspec-rails'
