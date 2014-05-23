@@ -81,7 +81,7 @@ NoChat::Application.configure do
   # Necessary for Devise
   config.action_mailer.default_url_options = { host: 'nochat-dev.herokuapp.com' }
 
-  APN = Houston::Client.production
+  APN = Houston::Client.development
 end
 
 ActionMailer::Base.smtp_settings = {
