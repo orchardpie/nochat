@@ -17,4 +17,5 @@ rerun.txt
 pickle-email-*.html
 .project
 spec/fixtures
+.env
 
